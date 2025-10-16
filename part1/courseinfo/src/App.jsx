@@ -27,7 +27,24 @@ const Total = (prop) => {
   )
 }
 
-const Application = () => {
+const Hello = ({name, age}) => {
+  // const {name, age} = props
+  // const bornYear = () => {
+  //   const yearNow = new Date().getFullYear()
+  //   return yearNow - age
+  // }
+
+  const bornYear = () => new Date().getFullYear() - age
+
+  return (
+    <>
+    <p>Hello {name}, you are {age} years old</p>
+    <p>So you're probably born in {bornYear()}</p>
+    </>
+  )
+}
+
+const Application = ({counter}) => {
   // const course = "Application Development"
   // const parts = [
   //     {
@@ -43,7 +60,9 @@ const Application = () => {
   //       exercises: 12
   //     }
   // ]
-
+  // console.log("Counter", counter)
+  const name = "Julia"
+  const age = "20"
   const course = {
     name: "Application Development",
     parts: [
@@ -67,6 +86,9 @@ const Application = () => {
       <Header course={course.name} />
       <Body parts={course.parts}/>
       <Total exercises={course.parts} />
+      <Hello name={name} age={age} />
+      <Hello name="Robert" age='27' />
+      <p>Counter: {counter}</p>
     </div>
   )
 }
