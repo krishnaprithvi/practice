@@ -6,7 +6,7 @@ const Header = (prop) => {
 
 const Part = (prop) => {
   return (
-    <p><b>Part {prop.index}:</b>  {prop.part}, <b>Exercises:</b> {prop.exercises}</p>
+    <p><b>Part {prop.index}:</b> {prop.part}, <b>Exercises:</b> {prop.exercises}</p>
   )
 }
 
