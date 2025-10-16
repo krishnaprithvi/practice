@@ -21,32 +21,45 @@ const Body = (prop) => {
 }
 
 const Total = (prop) => {
-  // console.log('ex',prop)
   return (
-    <p>Total number of exercises in the course is {prop.exercises[0] + prop.exercises[1] + prop.exercises[2]}</p>
+    <p>Total number of exercises in the course is {prop.exercises[0].exercises + prop.exercises[1].exercises + prop.exercises[2].exercises}</p>
   )
 }
 
 const Application = () => {
   const course = "Application Development"
-  const part1 = {
-    name: "Fundamentals",
-    exercises: 8
-  }
-  const part2 = {
-    name: "Using props for pass data",
-    exercises: 5
-  }
-  const part3 = {
-    name: "State of a component",
-    exercises: 12
-  }
+  // const part1 = {
+  //   name: "Fundamentals",
+  //   exercises: 8
+  // }
+  // const part2 = {
+  //   name: "Using props for pass data",
+  //   exercises: 5
+  // }
+  // const part3 = {
+  //   name: "State of a component",
+  //   exercises: 12
+  // }
+  const parts = [
+      {
+        name: "Fundamentals",
+        exercises: 8
+      },
+      {
+        name: "Using props for pass data",
+        exercises: 5
+      },
+      {
+        name: "State of a component",
+        exercises: 12
+      }
+  ]
 
   return (
     <div>
       <Header course={course} />
-      <Body parts={[part1, part2, part3]}/>
-      <Total exercises={[part1.exercises, part2.exercises, part3.exercises]} />
+      <Body parts={parts}/>
+      <Total exercises={parts} />
     </div>
   )
 }
