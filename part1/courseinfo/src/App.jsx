@@ -46,6 +46,10 @@ const Hello = ({name, age}) => {
   )
 }
 
+const DisplayCount = ({count}) =>  <p>Count: {count}</p>
+
+const ButtonComp = ({clickFunction, buttonText}) => <button onClick={clickFunction}>{buttonText}</button>
+
 const Application = () => {
   // const course = "Application Development"
   // const parts = [
@@ -84,10 +88,38 @@ const Application = () => {
     ]
   }
 
-  setTimeout(() => {
-    // setCount(count + 1)
-    setCount(count + 1)
-  }, 1000);
+  const incrementCount = () => setCount(count + 1)
+
+  const decrementCount = () => {
+    if(count == 0) {
+      appendText("error", "Counter cannot go under zero!")
+      // document.getElementById('error').replaceChildren("Counter cannot go under zero!")
+      // setTimeout(() => {
+      //   document.getElementById('error').replaceChildren("")
+      // }, 1500);
+    } else {
+      setCount(count - 1)
+    }
+  }
+
+  const resetCount = () => {
+    if(count == 0) {
+      appendText("error", "Counter is already zero!")
+      // document.getElementById('error').replaceChildren("Counter is already zero!")
+      // setTimeout(() => {
+      //   document.getElementById('error').replaceChildren("")
+      // }, 1500);
+    } else {
+      setCount(0)
+    }
+  }
+
+  const appendText = (id, text) => {
+    document.getElementById(id).replaceChildren(text)
+      setTimeout(() => {
+        document.getElementById(id).replaceChildren("")
+      }, 1500);
+  }
 
   return (
     <div>
@@ -96,7 +128,13 @@ const Application = () => {
       <Total exercises={course.parts} />
       <Hello name={name} age={age} />
       <Hello name="Robert" age='27' />
-      <p>Counter: {count}</p>
+      <DisplayCount count={count}/>
+      <ButtonComp clickFunction={incrementCount} buttonText={"Increment Count"}/>
+      <ButtonComp clickFunction={resetCount} buttonText={"Reset Count"}/>
+      <ButtonComp clickFunction={decrementCount} buttonText={"Decrement Counter"} />
+      {/* <button onClick={incrementCount}>Increment Counter</button> */}
+      {/* <button onClick={resetCount}>Reset</button> */}
+      <p id="error" style={{color: "red"}}></p>
     </div>
   )
 }
