@@ -1,3 +1,5 @@
+import { useState } from "react"
+
 const Header = (prop) => {
   return (
     <h1>{prop.course}</h1>
@@ -44,7 +46,7 @@ const Hello = ({name, age}) => {
   )
 }
 
-const Application = ({counter}) => {
+const Application = () => {
   // const course = "Application Development"
   // const parts = [
   //     {
@@ -61,6 +63,7 @@ const Application = ({counter}) => {
   //     }
   // ]
   // console.log("Counter", counter)
+  const [count, setCount] = useState(0)
   const name = "Julia"
   const age = "20"
   const course = {
@@ -81,6 +84,11 @@ const Application = ({counter}) => {
     ]
   }
 
+  setTimeout(() => {
+    // setCount(count + 1)
+    setCount(count + 1)
+  }, 1000);
+
   return (
     <div>
       <Header course={course.name} />
@@ -88,7 +96,7 @@ const Application = ({counter}) => {
       <Total exercises={course.parts} />
       <Hello name={name} age={age} />
       <Hello name="Robert" age='27' />
-      <p>Counter: {counter}</p>
+      <p>Counter: {count}</p>
     </div>
   )
 }
