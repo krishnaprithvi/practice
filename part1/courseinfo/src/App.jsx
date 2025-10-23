@@ -51,23 +51,12 @@ const DisplayCount = ({count}) =>  <p>Count: {count}</p>
 const ButtonComp = ({clickFunction, buttonText}) => <button onClick={clickFunction}>{buttonText}</button>
 
 const Application = () => {
-  // const course = "Application Development"
-  // const parts = [
-  //     {
-  //       name: "Fundamentals",
-  //       exercises: 8
-  //     },
-  //     {
-  //       name: "Using props for pass data",
-  //       exercises: 5
-  //     },
-  //     {
-  //       name: "State of a component",
-  //       exercises: 12
-  //     }
-  // ]
-  // console.log("Counter", counter)
-  const [count, setCount] = useState(0)
+
+  // const [count, setCount] = useState(0)
+  // const [left, setLeft] = useState(0)
+  // const [right, setRight] = useState(0)
+  const [clicks, setClicks] = useState({left: 0, right: 0, count: 0})
+
   const name = "Julia"
   const age = "20"
   const course = {
@@ -88,30 +77,51 @@ const Application = () => {
     ]
   }
 
-  const incrementCount = () => setCount(count + 1)
+  const incrementCount = () => setClicks({...clicks, count: clicks.count + 1})
 
   const decrementCount = () => {
-    if(count == 0) {
+    // const newClicks = {
+    //   left: clicks.left,
+    //   right: clicks.right,
+    //   count: clicks.count - 1
+    // }
+    //Object Spread syntax
+    const newClicks = {
+      ...clicks,
+      count: clicks.count - 1
+    }
+    if(clicks.count == 0) {
       appendText("error", "Counter cannot go under zero!")
-      // document.getElementById('error').replaceChildren("Counter cannot go under zero!")
-      // setTimeout(() => {
-      //   document.getElementById('error').replaceChildren("")
-      // }, 1500);
     } else {
-      setCount(count - 1)
+      setClicks(newClicks)
     }
   }
 
-  const resetCount = () => {
-    if(count == 0) {
+  const resetCount = () => { 
+    if(clicks.count == 0) {
       appendText("error", "Counter is already zero!")
-      // document.getElementById('error').replaceChildren("Counter is already zero!")
-      // setTimeout(() => {
-      //   document.getElementById('error').replaceChildren("")
-      // }, 1500);
     } else {
-      setCount(0)
+      setClicks({
+        ...clicks,
+        count: 0
+      })
     }
+  }
+
+  const leftCount = () => {
+    setClicks({
+      ...clicks,
+      left: clicks.left + 1
+    })
+    console.log("Left", clicks.left)
+  }
+  const rightCount = () => {
+    setClicks({
+      ...clicks,
+      right: clicks.right + 1,
+      
+    })
+    console.log("Right", clicks.right)
   }
 
   const appendText = (id, text) => {
@@ -128,12 +138,12 @@ const Application = () => {
       <Total exercises={course.parts} />
       <Hello name={name} age={age} />
       <Hello name="Robert" age='27' />
-      <DisplayCount count={count}/>
-      <ButtonComp clickFunction={incrementCount} buttonText={"Increment Count"}/>
-      <ButtonComp clickFunction={resetCount} buttonText={"Reset Count"}/>
+      <DisplayCount count={clicks.count}/>
+      <ButtonComp clickFunction={incrementCount} buttonText={"Increment Count"} />
+      <ButtonComp clickFunction={resetCount} buttonText={"Reset Count"} />
       <ButtonComp clickFunction={decrementCount} buttonText={"Decrement Counter"} />
-      {/* <button onClick={incrementCount}>Increment Counter</button> */}
-      {/* <button onClick={resetCount}>Reset</button> */}
+      <ButtonComp clickFunction={leftCount} buttonText={"Set Left"} />
+      <ButtonComp clickFunction={rightCount} buttonText={"Set Right"} />
       <p id="error" style={{color: "red"}}></p>
     </div>
   )
