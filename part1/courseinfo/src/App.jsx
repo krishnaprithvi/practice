@@ -7,7 +7,6 @@ const Header = (prop) => {
 }
 
 const Part = (prop) => {
-  // console.log("parts", prop)
   return (
     <p><b>Part {prop.index}:</b> {prop.part.name}, <b>Exercises:</b> {prop.part.exercises}</p>
   )
@@ -23,11 +22,8 @@ const Body = (prop) => {
   )
 }
 
-const Total = (prop) => {
-  return (
-    <p>Total number of exercises in the course is {prop.exercises[0].exercises + prop.exercises[1].exercises + prop.exercises[2].exercises}</p>
-  )
-}
+const Total = (prop) => <p>Total number of exercises in the course is {prop.exercises[0].exercises + prop.exercises[1].exercises + prop.exercises[2].exercises}</p>
+
 
 const Hello = ({name, age}) => {
   // const {name, age} = props
@@ -46,19 +42,38 @@ const Hello = ({name, age}) => {
   )
 }
 
-const DisplayCount = ({count}) =>  <p>Count: {count}</p>
+const History = (props) => {
+  if(props.allClicks.length == 0) {
+    return (
+      <div>
+        <p>The app can be used by clicking the buttons</p>
+      </div>
+    )
+  }
+  return (
+    <div>
+      <p>Button press history: {props.allClicks.join(", ")}</p>
+    </div>
+  )
+}
+
+const DisplayCount = ({name, count}) =>  <div>{name}: {count}</div>
 
 const ButtonComp = ({clickFunction, buttonText}) => <button onClick={clickFunction}>{buttonText}</button>
 
 const Application = () => {
-
+  
   // const [count, setCount] = useState(0)
   // const [left, setLeft] = useState(0)
   // const [right, setRight] = useState(0)
-  const [clicks, setClicks] = useState({left: 0, right: 0, count: 0})
+  const [clicks, setClicks] = useState({state: 'left', leftCount: 0, rightCount: 0})
+  const [allClicks, setAll] = useState([])
+  const [total, setTotal] = useState(0)
+  
 
   const name = "Julia"
   const age = "20"
+  
   const course = {
     name: "Application Development",
     parts: [
@@ -77,8 +92,26 @@ const Application = () => {
     ]
   }
 
-  const incrementCount = () => setClicks({...clicks, count: clicks.count + 1})
+  const setToValue = (newVal) => { 
+    setTotal(total + 1)
+    setAll(allClicks.concat('SetVal'))
+    if(clicks.state == 'left') {
+      setClicks({...clicks, leftCount: newVal})
+    } else {
+      setClicks({...clicks, rightCount: newVal}) 
+    }
+  }
 
+  const incrementCount = () => {
+    setAll(allClicks.concat('Inc'))
+    setTotal(total + 1)
+    if(clicks.state == 'left') {
+      setClicks({...clicks, leftCount: clicks.leftCount + 1})
+    } else {
+      setClicks({...clicks, rightCount: clicks.rightCount + 1})
+    }
+  }
+  
   const decrementCount = () => {
     // const newClicks = {
     //   left: clicks.left,
@@ -86,42 +119,65 @@ const Application = () => {
     //   count: clicks.count - 1
     // }
     //Object Spread syntax
-    const newClicks = {
-      ...clicks,
-      count: clicks.count - 1
-    }
-    if(clicks.count == 0) {
-      appendText("error", "Counter cannot go under zero!")
+    setTotal(total + 1)
+    
+    setAll(allClicks.concat('Dec'))
+    if(clicks.state == 'left') {
+      if(clicks.leftCount == 0) {
+        appendText("error", "Counter cannot go under zero!")
+      } else {
+        setClicks({...clicks, leftCount: clicks.leftCount - 1})
+      }
     } else {
-      setClicks(newClicks)
+      if(clicks.rightCount == 0) {
+        appendText("error", "Counter cannot go under zero!")
+      } else {
+        setClicks({...clicks, rightCount: clicks.rightCount - 1})
+      }
     }
   }
 
-  const resetCount = () => { 
-    if(clicks.count == 0) {
-      appendText("error", "Counter is already zero!")
+  const resetCount = () => {
+    setTotal(total + 1)
+    setAll(allClicks.concat('Res'))
+    if(clicks.state == 'left') { 
+      if(clicks.leftCount == 0) {
+        appendText("error", "Left Counter is already zero!")
+      } else {
+        setClicks({
+          ...clicks,
+          leftCount: 0
+        })
+      }
     } else {
-      setClicks({
-        ...clicks,
-        count: 0
-      })
+      if(clicks.rightCount == 0) {
+        appendText("error", "Right Counter is already zero!")
+      } else {
+        setClicks({
+          ...clicks,
+          rightCount: 0
+        })
+      }
     }
   }
 
-  const leftCount = () => {
+  const leftCount = (left) => {
+    setTotal(total + 1)
+    setAll(allClicks.concat('Lef'))
     setClicks({
       ...clicks,
-      left: clicks.left + 1
+      state: left
     })
-    console.log("Left", clicks.left)
   }
-  const rightCount = () => {
+
+  const rightCount = (right) => {
+    setTotal(total + 1)
+    setAll(allClicks.concat('Rig'))
     setClicks({
       ...clicks,
-      right: clicks.right + 1,
+      state: right
       
     })
-    console.log("Right", clicks.right)
   }
 
   const appendText = (id, text) => {
@@ -138,13 +194,20 @@ const Application = () => {
       <Total exercises={course.parts} />
       <Hello name={name} age={age} />
       <Hello name="Robert" age='27' />
-      <DisplayCount count={clicks.count}/>
+      <div style={{display: 'flex', gap: '10px', margin: '0 0 10px 0'}}>
+        <DisplayCount count={clicks.leftCount} name={"Left Count"} />
+        <DisplayCount count={clicks.rightCount} name={"Right Count"} />
+      </div>
       <ButtonComp clickFunction={incrementCount} buttonText={"Increment Count"} />
       <ButtonComp clickFunction={resetCount} buttonText={"Reset Count"} />
       <ButtonComp clickFunction={decrementCount} buttonText={"Decrement Counter"} />
-      <ButtonComp clickFunction={leftCount} buttonText={"Set Left"} />
-      <ButtonComp clickFunction={rightCount} buttonText={"Set Right"} />
+      <ButtonComp clickFunction={() => leftCount('left')} buttonText={"Set Left"} />
+      <ButtonComp clickFunction={() => rightCount('right')} buttonText={"Set Right"} />
+      <ButtonComp clickFunction={() => setToValue(25)} buttonText={"Set count to 25"} />
+      <button onClick={() => console.log('clicked the button')}>Button</button>
       <p id="error" style={{color: "red"}}></p>
+      <History allClicks={allClicks} />
+      <p>Total clicks: {total}</p>
     </div>
   )
 }
